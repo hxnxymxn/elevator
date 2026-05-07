@@ -153,59 +153,6 @@
   }
 
   /* SVG ORNAMENT — murky 180° float, right side */
-  .murk-svg {
-    position: absolute;
-    top: 15%;
-    left: -30%;
-    width: 160vw;
-    height: 90vh;
-    z-index: 1;
-    pointer-events: none;
-    overflow: hidden;
-  }
-  .murk-svg::before {
-    content: '';
-    position: absolute;
-    inset: -40px;
-    background: radial-gradient(
-      ellipse 80% 70% at 40% 45%,
-      oklch(0.38 0.12 142) 0%,
-      oklch(0.30 0.10 140) 30%,
-      oklch(0.22 0.08 138) 60%,
-      transparent 100%
-    );
-    -webkit-mask-image: url('usethis.svg');
-            mask-image: url('usethis.svg');
-    -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-            mask-size: contain;
-    -webkit-mask-position: center;
-            mask-position: center;
-    filter: blur(45px);
-    opacity: 0.14;
-  }
-  .murk-svg::after {
-    content: '';
-    position: absolute;
-    inset: -80px;
-    background: radial-gradient(
-      ellipse 90% 80% at 45% 40%,
-      oklch(0.32 0.10 140) 0%,
-      oklch(0.24 0.08 138) 40%,
-      transparent 80%
-    );
-    -webkit-mask-image: url('usethis.svg');
-            mask-image: url('usethis.svg');
-    -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-            mask-size: contain;
-    -webkit-mask-position: center;
-            mask-position: center;
-    filter: blur(100px);
-    opacity: 0.10;
-  }
 
   /* STATUE — layer 4: on top of darkening */
   .statue-wrap {
@@ -414,8 +361,6 @@
 <!-- RIPPLE: surface rings at top -->
 <div class="surface-ripple" aria-hidden="true"></div>
 
-<!-- MURK SVG: green tinted, blurred, bottom left -->
-<div class="murk-svg" aria-hidden="true"></div>
 
 <!-- STATUE: fixed at page bottom, murky -->
 <div class="statue-wrap" aria-hidden="true">
