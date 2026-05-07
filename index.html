@@ -276,8 +276,12 @@
     align-items: baseline;
     gap: 12px;
     padding-bottom: 10px;
-    border-bottom: 2px solid var(--p2);
+    border-bottom: 2px solid var(--era-color, var(--p2));
   }
+
+  [data-era="1"] { --era-color: oklch(0.72 0.14 170); }
+  [data-era="2"] { --era-color: oklch(0.72 0.14 240); }
+  [data-era="3"] { --era-color: oklch(0.72 0.14 310); }
   .era-title {
     font-family: 'Inter', sans-serif; font-weight: 600;
     font-size: 15px; line-height: 16px;
@@ -321,7 +325,7 @@
     font-family: 'JetBrains Mono', monospace; font-weight: 500;
     font-size: 17px; line-height: 1;
     letter-spacing: 0.02em; text-transform: uppercase;
-    color: var(--p2); text-align: right;
+    color: var(--era-color, var(--p2)); text-align: right;
     font-variant-numeric: tabular-nums;
   }
   .track-info { min-width: 0; }
@@ -476,6 +480,7 @@
     </div>
   </header>
 
+  <div data-era="1">
   <div class="era-header">
     <div class="era-header-inner">
       <span class="era-title">Sun Fringe &middot; Pre-War Threat</span>
@@ -492,7 +497,9 @@
     <div class="section-head"><div class="section-label">Bobby Blue Bland</div><div class="section-note">Ice ache &middot; other side</div></div>
     <div id="tracks-bland"></div>
   </section>
+  </div>
 
+  <div data-era="2">
   <div class="era-header">
     <div class="era-header-inner">
       <span class="era-title">Art Damage &middot; Memphis &rarr; Outsider</span>
@@ -507,7 +514,9 @@
     <div class="section-head"><div class="section-label">Eugene Chadbourne</div><div class="section-note">Country protest &middot; Shockabilly</div></div>
     <div id="tracks-chad"></div>
   </section>
+  </div>
 
+  <div data-era="3">
   <div class="era-header">
     <div class="era-header-inner">
       <span class="era-title">Post-Birthday Party &middot; Drone</span>
@@ -520,6 +529,7 @@
     <div class="section-head"><div class="section-label">Flying Saucer Attack</div><div class="section-note">Bristol drone devotional</div></div>
     <div id="tracks-fsa"></div>
   </section>
+  </div>
 
   <footer>
     <div class="footer-line"></div>
