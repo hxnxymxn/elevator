@@ -300,57 +300,52 @@
     margin-left: auto;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
   }
   .era-more-btn {
-    font-family: 'Inter', sans-serif;
-    font-size: 15px; font-weight: 520;
-    letter-spacing: 0.02em; text-transform: uppercase;
-    color: var(--era-color, var(--p2));
+    display: flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px;
     background: none; border: none; cursor: pointer;
-    padding: 2px 0;
+    padding: 0;
     opacity: 0.7;
     transition: opacity 0.12s;
-    white-space: nowrap;
   }
+  .era-more-btn svg { width: 30px; height: 22px; }
   .era-more-btn:hover { opacity: 1; }
-  .era-more-btn:disabled { opacity: 0.3; cursor: wait; }
-  .era-more-btn .loader, .era-more-btn .loader:before, .era-more-btn .loader:after {
-    border-radius: 50%;
-    width: 2.5em;
-    height: 2.5em;
-    animation-fill-mode: both;
-    animation: bblFadInOut 1.8s infinite ease-in-out;
-  }
+  .era-more-btn:hover .more-rest { display: none; }
+  .era-more-btn:hover .more-hover { display: block; }
+  .era-more-btn .more-hover { display: none; width: 32px; height: 32px; }
+  .era-more-btn:disabled { opacity: 0.4; cursor: wait; }
   .era-more-btn .loader {
-    color: var(--era-color, var(--p2));
-    font-size: 4px;
-    display: inline-block;
-    position: relative;
-    text-indent: -9999em;
-    transform: translateZ(0);
-    animation-delay: -0.16s;
-    top: -4px;
+    width: 26px; height: 26px;
+    display: inline-block; position: relative;
   }
-  .era-more-btn .loader:before, .era-more-btn .loader:after {
+  .era-more-btn .loader::after,
+  .era-more-btn .loader::before {
     content: '';
+    box-sizing: border-box;
+    width: 26px; height: 26px;
+    border: 2px solid #FFF;
     position: absolute;
-    top: 0;
+    left: 0; top: 0;
+    animation: scaleOut 2s ease-in-out infinite;
   }
-  .era-more-btn .loader:before { left: -3.5em; animation-delay: -0.32s; }
-  .era-more-btn .loader:after { left: 3.5em; }
-  @keyframes bblFadInOut {
-    0%, 80%, 100% { box-shadow: 0 2.5em 0 -1.3em; }
-    40% { box-shadow: 0 2.5em 0 0; }
+  .era-more-btn .loader::after {
+    border-color: #FA5ABE;
+    animation-delay: 1s;
+  }
+  @keyframes scaleOut {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
   }
   .era-trash-btn {
     display: flex; align-items: center; justify-content: center;
-    width: 24px; height: 24px;
+    width: 32px; height: 32px;
     color: var(--mid); background: none; border: none;
     padding: 0; cursor: pointer;
     transition: color 0.12s;
   }
-  .era-trash-btn svg { width: 18px; height: 18px; }
+  .era-trash-btn svg { width: 28px; height: 28px; }
   .era-trash-btn:hover { color: oklch(0.65 0.22 360); }
 
   [data-era="1"] { --era-color: oklch(0.78 0.14 180); }
@@ -778,7 +773,7 @@ function buildAiSection(query, songs) {
 
   var hdr = document.createElement('div');
   hdr.className = 'era-header';
-  hdr.innerHTML = '<div class="era-header-inner"><span class="era-title">' + query + '</span><div class="era-actions"><button class="era-more-btn">+ one more</button><button class="era-trash-btn">' + ICON_TRASH + '</button></div></div>';
+  hdr.innerHTML = '<div class="era-header-inner"><span class="era-title">' + query + '</span><div class="era-actions"><button class="era-more-btn"><svg class="more-rest" width="30" height="22" viewBox="0 0 30 22" fill="none"><path d="M29.9989 22H16.1133V17.3521H20.4333V5.76338L16.175 6.6V1.85915L25.679 0V17.3521H29.9989V22Z" fill="white"/><path d="M9.44225 8.88226H13.8857V13.5301H9.44225V18.178H4.50513V13.5301H0V8.88226H4.50513V4.23438H9.44225V8.88226Z" fill="white"/></svg><svg class="more-hover" width="44" height="44" viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="4" fill="#FA5ABE"/><path d="M36.8466 33H22.9609V28.3521H27.2809V16.7634L23.0227 17.6V12.8592L32.5266 11V28.3521H36.8466V33Z" fill="white"/><path d="M16.2899 19.8823H20.7333V24.5301H16.2899V29.178H11.3528V24.5301H6.84766V19.8823H11.3528V15.2344H16.2899V19.8823Z" fill="white"/></svg></button><button class="era-trash-btn">' + ICON_TRASH + '</button></div></div>';
   wrapper.appendChild(hdr);
 
   var sec = document.createElement('section');
@@ -803,6 +798,7 @@ function buildAiSection(query, songs) {
   var moreBtn = hdr.querySelector('.era-more-btn');
   moreBtn.addEventListener('click', function() {
     moreBtn.disabled = true;
+    moreBtn._prevHTML = moreBtn.innerHTML;
     moreBtn.innerHTML = '<span class="loader"></span>';
     fetch('/api/recommend', {
       method: 'POST',
@@ -824,7 +820,7 @@ function buildAiSection(query, songs) {
       sec.appendChild(buildTrackRow(newSong, idx, query));
     })
     .catch(function(err) { alert('Failed: ' + err.message); })
-    .finally(function() { moreBtn.disabled = false; moreBtn.textContent = '+ one more'; });
+    .finally(function() { moreBtn.disabled = false; moreBtn.innerHTML = moreBtn._prevHTML; });
   });
 
   return { wrapper: wrapper, songs: songs };
