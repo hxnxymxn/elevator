@@ -315,33 +315,45 @@
   .era-more-btn:disabled { opacity: 0.4; cursor: wait; }
   .era-more-btn .loader {
     width: 28px; height: 28px;
+    display: inline-block;
     position: relative;
-    border-radius: 4px;
-    background-color: transparent;
-    background-image:
-      radial-gradient(circle 2.5px, #f7f7f7 100%, transparent 0),
-      radial-gradient(circle 2.5px, #f7f7f7 100%, transparent 0),
-      radial-gradient(circle 2.5px, #f7f7f7 100%, transparent 0),
-      radial-gradient(circle 2.5px, #f7f7f7 100%, transparent 0),
-      radial-gradient(circle 2.5px, #f7f7f7 100%, transparent 0),
-      radial-gradient(circle 2.5px, #f7f7f7 100%, transparent 0);
-    background-repeat: no-repeat;
-    animation: era-move 4s linear infinite, era-rotate 2s linear infinite;
+    transform: rotate(45deg) scale(0.58);
   }
-  @keyframes era-rotate {
-    0%, 20% { transform: rotate(0deg); }
-    30%, 40% { transform: rotate(90deg); }
-    50%, 60% { transform: rotate(180deg); }
-    70%, 80% { transform: rotate(270deg); }
-    90%, 100% { transform: rotate(360deg); }
+  .era-more-btn .loader::before {
+    content: '';
+    box-sizing: border-box;
+    width: 24px; height: 24px;
+    position: absolute;
+    left: 0; top: -24px;
+    animation: animloader 4s ease infinite;
   }
-  @keyframes era-move {
-    0%, 9% { background-position: -6px -8px, -6px 0px, -6px 8px, 6px -8px, 6px 0px, 6px 8px; }
-    10%, 25% { background-position: 0px -8px, -6px 0px, -6px 8px, 18px -8px, 6px 0px, 6px 8px; }
-    30%, 45% { background-position: 0px -18px, -6px -5px, -6px 6px, 18px -8px, 6px -5px, 6px 6px; }
-    50%, 65% { background-position: 0px -18px, -6px -18px, -6px 6px, 18px -6px, 0px -5px, 6px 6px; }
-    70%, 85% { background-position: 0px -18px, -6px -18px, 0px 6px, 18px -6px, 0px -5px, 18px 6px; }
-    90%, 100% { background-position: 0px -18px, -6px -18px, 0px 0px, 18px -6px, 0px 0px, 18px 6px; }
+  .era-more-btn .loader::after {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    left: 0; top: 0;
+    width: 24px; height: 24px;
+    background: rgba(255,255,255,0.85);
+    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    animation: animloader2 2s ease infinite;
+  }
+  @keyframes animloader {
+    0% { box-shadow: 0 24px rgba(255,255,255,0), 24px 24px rgba(255,255,255,0), 24px 48px rgba(255,255,255,0), 0px 48px rgba(255,255,255,0); }
+    12% { box-shadow: 0 24px white, 24px 24px rgba(255,255,255,0), 24px 48px rgba(255,255,255,0), 0px 48px rgba(255,255,255,0); }
+    25% { box-shadow: 0 24px white, 24px 24px white, 24px 48px rgba(255,255,255,0), 0px 48px rgba(255,255,255,0); }
+    37% { box-shadow: 0 24px white, 24px 24px white, 24px 48px white, 0px 48px rgba(255,255,255,0); }
+    50% { box-shadow: 0 24px white, 24px 24px white, 24px 48px white, 0px 48px white; }
+    62% { box-shadow: 0 24px rgba(255,255,255,0), 24px 24px white, 24px 48px white, 0px 48px white; }
+    75% { box-shadow: 0 24px rgba(255,255,255,0), 24px 24px rgba(255,255,255,0), 24px 48px white, 0px 48px white; }
+    87% { box-shadow: 0 24px rgba(255,255,255,0), 24px 24px rgba(255,255,255,0), 24px 48px rgba(255,255,255,0), 0px 48px white; }
+    100% { box-shadow: 0 24px rgba(255,255,255,0), 24px 24px rgba(255,255,255,0), 24px 48px rgba(255,255,255,0), 0px 48px rgba(255,255,255,0); }
+  }
+  @keyframes animloader2 {
+    0% { transform: translate(0,0) rotateX(0) rotateY(0); }
+    25% { transform: translate(100%,0) rotateX(0) rotateY(180deg); }
+    50% { transform: translate(100%,100%) rotateX(-180deg) rotateY(180deg); }
+    75% { transform: translate(0,100%) rotateX(-180deg) rotateY(360deg); }
+    100% { transform: translate(0,0) rotateX(0) rotateY(360deg); }
   }
   .era-trash-btn {
     display: flex; align-items: center; justify-content: center;
@@ -408,7 +420,11 @@
     font-size: 17px; line-height: 16px;
     letter-spacing: 0.02em; color: var(--off);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    display: flex; align-items: center; gap: 4px;
   }
+  .new-indicator { flex-shrink: 0; width: 17px; height: 17px; color: #73D7E5; opacity: 0.7; }
+  .new-indicator.fade-out { transition: opacity 3s ease; opacity: 0; }
+
   .track-artist {
     font-family: 'Inter', sans-serif; font-weight: 600;
     font-size: 15px; line-height: 16px;
@@ -687,6 +703,7 @@ var ICON_COPY = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fil
 var ICON_COPY_CHECK = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15L14 17L18 13"/><path d="M20 8H10C8.89543 8 8 8.89543 8 10V20C8 21.1046 8.89543 22 10 22H20C21.1046 22 22 21.1046 22 20V10C22 8.89543 21.1046 8 20 8Z"/><path d="M4 16C2.9 16 2 15.1 2 14V4C2 2.9 2.9 2 4 2H14C15.1 2 16 2.9 16 4"/></svg>';
 var ICON_PLAY = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5.00059C4.9999 4.64868 5.09265 4.30298 5.26888 3.99838C5.44512 3.69379 5.69861 3.44108 6.00375 3.26579C6.30889 3.09049 6.65488 2.99882 7.00679 3.00001C7.3587 3.00121 7.70406 3.09523 8.008 3.27259L20.005 10.2706C20.3078 10.4463 20.5591 10.6983 20.7339 11.0016C20.9088 11.3049 21.0009 11.6487 21.0012 11.9987C21.0015 12.3488 20.91 12.6928 20.7357 12.9963C20.5614 13.2999 20.3105 13.5524 20.008 13.7286L8.008 20.7286C7.70406 20.906 7.3587 21 7.00679 21.0012C6.65488 21.0024 6.30889 20.9107 6.00375 20.7354C5.69861 20.5601 5.44512 20.3074 5.26888 20.0028C5.09265 19.6982 4.9999 19.3525 5 19.0006V5.00059Z"/></svg>';
 var ICON_TRASH = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11V17"/><path d="M14 11V17"/><path d="M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6"/><path d="M3 6H21"/><path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6"/></svg>';
+var ICON_BALLOON = '<svg class="new-indicator" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4 8 8 0 0 1-8 8"/><path d="m12 18-2 4"/><path d="M12 18h4"/></svg>';
 
 function flash(btn, cls, dur) {
   btn.classList.add(cls);
@@ -753,12 +770,17 @@ function removeSection(wrapper) {
   setTimeout(function() { wrapper.remove(); }, 300);
 }
 
-function buildTrackRow(track, i, sectionQuery) {
+function buildTrackRow(track, i, sectionQuery, isNew) {
   var term = track.title + ' ' + track.artist;
   var trackKey = (sectionQuery || '') + '::' + term;
+  var balloon = isNew ? ICON_BALLOON : '';
   var row = document.createElement('div');
   row.className = 'track';
-  row.innerHTML = '<span class="track-num">' + String(i+1).padStart(2,'0') + '</span><div class="track-info"><div class="track-title">' + track.title + '</div><div class="track-artist">' + track.artist + '</div></div><button class="copy-btn" aria-label="Copy">' + ICON_COPY + '</button><button class="play-btn" aria-label="Play">' + ICON_PLAY + '</button><button class="trash-btn" aria-label="Remove">' + ICON_TRASH + '</button>';
+  row.innerHTML = '<span class="track-num">' + String(i+1).padStart(2,'0') + '</span><div class="track-info"><div class="track-title"><span>' + track.title + '</span>' + balloon + '</div><div class="track-artist">' + track.artist + '</div></div><button class="copy-btn" aria-label="Copy">' + ICON_COPY + '</button><button class="play-btn" aria-label="Play">' + ICON_PLAY + '</button><button class="trash-btn" aria-label="Remove">' + ICON_TRASH + '</button>';
+  if (isNew) {
+    setTimeout(function() { var b = row.querySelector('.new-indicator'); if (b) b.classList.add('fade-out'); }, 2000);
+    setTimeout(function() { var b = row.querySelector('.new-indicator'); if (b) b.remove(); }, 5000);
+  }
   row.querySelector('.copy-btn').addEventListener('click', function(e) {
     e.stopPropagation(); copyText(term, e.currentTarget);
   });
@@ -822,7 +844,7 @@ function buildAiSection(query, songs) {
       if (!found) sections.push({ query: query, songs: songs });
       saveAiSections(sections);
       var idx = sec.querySelectorAll('.track').length;
-      sec.appendChild(buildTrackRow(newSong, idx, query));
+      sec.appendChild(buildTrackRow(newSong, idx, query, true));
     })
     .catch(function(err) { alert('Failed: ' + err.message); })
     .finally(function() { moreBtn.disabled = false; moreBtn.innerHTML = moreBtn._prevHTML; });
