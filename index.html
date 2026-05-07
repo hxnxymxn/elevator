@@ -158,7 +158,8 @@
     height: 600px;
     width: auto;
     z-index: 4;
-    pointer-events: none;
+    pointer-events: auto;
+    cursor: crosshair;
     -webkit-mask-image: linear-gradient(
       to bottom,
       transparent 0%%,
@@ -185,6 +186,46 @@
     opacity: 0.22;
     mix-blend-mode: luminosity;
     filter: brightness(0.55) contrast(1.1);
+    transition: none;
+  }
+  .statue-wrap:hover img {
+    animation: glitch 0.8s steps(1, end) infinite;
+  }
+  @keyframes glitch {
+    0%   { opacity: 0.22; }
+    3%   { opacity: 0; }
+    5%   { opacity: 0.9; }
+    7%   { opacity: 0; }
+    10%  { opacity: 0.22; }
+    18%  { opacity: 0.22; }
+    19%  { opacity: 1; }
+    20%  { opacity: 0; }
+    23%  { opacity: 0.7; }
+    24%  { opacity: 0; }
+    27%  { opacity: 0.22; }
+    42%  { opacity: 0.22; }
+    43%  { opacity: 0; }
+    44%  { opacity: 0.85; }
+    46%  { opacity: 0; }
+    48%  { opacity: 0.22; }
+    55%  { opacity: 0.22; }
+    56%  { opacity: 1; }
+    57%  { opacity: 0; }
+    58%  { opacity: 0.6; }
+    59%  { opacity: 0; }
+    61%  { opacity: 0.22; }
+    73%  { opacity: 0.22; }
+    74%  { opacity: 0; }
+    76%  { opacity: 0.95; }
+    77%  { opacity: 0; }
+    79%  { opacity: 0.22; }
+    88%  { opacity: 0.22; }
+    89%  { opacity: 0.8; }
+    90%  { opacity: 0; }
+    91%  { opacity: 1; }
+    92%  { opacity: 0; }
+    94%  { opacity: 0.22; }
+    100% { opacity: 0.22; }
   }
 
   /* BUBBLES — layer 1 */
