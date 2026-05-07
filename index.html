@@ -248,31 +248,27 @@
   }
 
   header { padding: 52px 28px 0; }
-  .masthead { max-width: calc(700px - 56px); }
   .header-rule      { height: 6px; background: var(--p2); margin-bottom: 1px; }
   .header-rule-thin { height: 1px; background: var(--p1); opacity: 0.22; margin-bottom: 32px; }
 
   .masthead {
-    display: flex; align-items: flex-end;
-    gap: 16px; margin-bottom: 8px;
+    margin-bottom: 8px;
   }
   .title-row {
-    display: flex; align-items: center; gap: 12px;
-    white-space: nowrap;
-    font-size: clamp(48px, 12vw, 96px);
+    display: flex; align-items: center; gap: 14px;
+    width: 100%;
   }
   .title-icon path { fill: currentColor; stroke: currentColor; stroke-width: 0.4px; }
   h1 {
     font-family: 'EB Garamond', serif;
     font-weight: 800;
-    font-size: clamp(48px, 12vw, 96px);
     letter-spacing: -0.02em;
     line-height: 0.88;
     color: var(--off);
+    flex: 1;
+    min-width: 0;
   }
   .title-icon {
-    height: 44px;
-    width: auto;
     flex-shrink: 0;
   }
 
@@ -640,6 +636,44 @@ Object.entries(DATA).forEach(([id, tracks]) => {
     container.appendChild(row);
   });
 });
+
+// Size heading: h1 fills row width, icon matches h1 cap height
+(function() {
+  var h1 = document.querySelector('h1');
+  var icon = document.querySelector('.title-icon');
+  var row = document.querySelector('.title-row');
+  if (!h1 || !icon || !row) return;
+  var GAP = 14;
+  var CAP_RATIO = 0.68; // EB Garamond cap-height / em
+  var ICON_ASPECT = 40 / 32; // viewBox ratio
+
+  function fit() {
+    // reset
+    h1.style.fontSize = '';
+    icon.style.height = '';
+    icon.style.width = '';
+
+    var rowW = row.clientWidth;
+    // binary search for font size that makes text + icon fit exactly
+    var lo = 20, hi = 200, mid;
+    for (var i = 0; i < 20; i++) {
+      mid = (lo + hi) / 2;
+      var capH = mid * CAP_RATIO;
+      var iconW = capH * ICON_ASPECT;
+      var textW = rowW - iconW - GAP;
+      h1.style.fontSize = mid + 'px';
+      if (h1.scrollWidth > textW) hi = mid;
+      else lo = mid;
+    }
+    var finalSize = Math.floor(lo);
+    h1.style.fontSize = finalSize + 'px';
+    var capHeight = finalSize * CAP_RATIO;
+    icon.style.height = capHeight + 'px';
+    icon.style.width = (capHeight * ICON_ASPECT) + 'px';
+  }
+  fit();
+  window.addEventListener('resize', fit);
+})();
 </script>
 </body>
 </html>
