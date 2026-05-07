@@ -858,6 +858,14 @@ getAiSections().forEach(function(s) {
   aiResults.appendChild(built.wrapper);
 });
 
+// Gather recent enriched songs for context
+function getRecentContext() {
+  var sections = getAiSections();
+  var all = [];
+  sections.forEach(function(s) { s.songs.forEach(function(song) { all.push(song); }); });
+  return all.slice(-3);
+}
+
 // Hunt
 function doHunt() {
   var q = huntInput.value.trim();
@@ -869,7 +877,7 @@ function doHunt() {
   fetch('/api/recommend', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query: q })
+    body: JSON.stringify({ query: q, context: getRecentContext() })
   })
   .then(function(r) { return r.json(); })
   .then(function(data) {
