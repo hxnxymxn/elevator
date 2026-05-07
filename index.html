@@ -375,6 +375,34 @@
   }
   .era-more-btn:hover { opacity: 1; }
   .era-more-btn:disabled { opacity: 0.3; cursor: wait; }
+  .era-more-btn .loader, .era-more-btn .loader:before, .era-more-btn .loader:after {
+    border-radius: 50%;
+    width: 2.5em;
+    height: 2.5em;
+    animation-fill-mode: both;
+    animation: bblFadInOut 1.8s infinite ease-in-out;
+  }
+  .era-more-btn .loader {
+    color: var(--era-color, var(--p2));
+    font-size: 4px;
+    display: inline-block;
+    position: relative;
+    text-indent: -9999em;
+    transform: translateZ(0);
+    animation-delay: -0.16s;
+    top: -4px;
+  }
+  .era-more-btn .loader:before, .era-more-btn .loader:after {
+    content: '';
+    position: absolute;
+    top: 0;
+  }
+  .era-more-btn .loader:before { left: -3.5em; animation-delay: -0.32s; }
+  .era-more-btn .loader:after { left: 3.5em; }
+  @keyframes bblFadInOut {
+    0%, 80%, 100% { box-shadow: 0 2.5em 0 -1.3em; }
+    40% { box-shadow: 0 2.5em 0 0; }
+  }
   .era-trash-btn {
     display: flex; align-items: center; justify-content: center;
     width: 24px; height: 24px;
@@ -901,7 +929,7 @@ function buildAiSection(query, songs) {
   var moreBtn = hdr.querySelector('.era-more-btn');
   moreBtn.addEventListener('click', function() {
     moreBtn.disabled = true;
-    moreBtn.textContent = '\u2026';
+    moreBtn.innerHTML = '<span class="loader"></span>';
     fetch('/api/recommend', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
