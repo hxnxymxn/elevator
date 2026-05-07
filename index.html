@@ -332,10 +332,8 @@
     cursor: pointer;
   }
   .track:hover {
-    background: oklch(0.80 0.16 78 / 0.04);
-    margin: 0 -10px; padding-left: 10px; padding-right: 10px;
+    background: none;
   }
-  .track:hover .copy-btn, .track:hover .play-btn { color: var(--off); }
   .track-num {
     font-family: 'JetBrains Mono', monospace; font-weight: 500;
     font-size: 17px; line-height: 1;
@@ -365,8 +363,10 @@
     transition: color 0.12s ease; flex-shrink: 0;
   }
   .copy-btn svg, .play-btn svg { width: 28px; height: 28px; stroke-width: 1.5; }
-  .copy-btn:hover, .play-btn:hover { color: var(--off); }
-  .copy-btn.copied { color: var(--p2); }
+  .copy-btn:hover { color: oklch(0.82 0.16 80); }
+  .copy-btn:active, .copy-btn.copied { color: oklch(0.78 0.18 78); }
+  .play-btn:hover { color: oklch(0.72 0.18 330); }
+  .play-btn:active { color: oklch(0.68 0.20 325); }
 
   footer { padding: 52px 28px 0; display: flex; align-items: center; gap: 16px; }
   .footer-line { flex: 1; height: 1px; background: var(--rule); }
