@@ -314,28 +314,33 @@
   .era-more-btn:hover { color: #D4F4FA; }
   .era-more-btn:disabled { opacity: 1; cursor: wait; }
   .era-more-btn .loader {
-    position: relative;
     width: 28px; height: 28px;
     border-radius: 50%;
-    box-shadow: inset 0 0 5px -1px rgba(255,255,255,0.5),
-                inset 0 -10px 10px -5px rgba(255,255,255,0.5);
-    background: linear-gradient(#de3500 28px, transparent 0) no-repeat;
-    background-position: 0px 28px;
-    animation: fillLq 10s linear infinite alternate;
-    overflow: hidden;
+    background: linear-gradient(to right, #73D7E5 50%, #FFB42A 50%);
+    position: relative;
+    animation: yinyang 1.2s linear infinite;
   }
   .era-more-btn .loader::before {
-    position: absolute;
     content: '';
-    width: 40%; height: 25%;
-    top: 5px; left: 3px;
-    background: rgba(255,255,255,0.1);
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 14px; height: 14px;
     border-radius: 50%;
-    transform: rotate(-45deg);
+    background: #73D7E5;
   }
-  @keyframes fillLq {
-    0%, 10% { background-position: 0 28px; }
-    90%, 100% { background-position: 0 0; }
+  .era-more-btn .loader::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: #FFB42A;
+  }
+  @keyframes yinyang {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
   .era-trash-btn {
     display: flex; align-items: center; justify-content: center;
