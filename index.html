@@ -376,7 +376,7 @@
     letter-spacing: 0.02em; text-transform: uppercase; color: #383838;
   }
 
-  .watermark, .watermark-tr {
+  .watermark, .watermark-tr, .watermark-tl {
     position: fixed;
     opacity: 0.08; pointer-events: auto; z-index: 2;
     cursor: pointer;
@@ -384,7 +384,8 @@
   }
   .watermark { bottom: 28px; left: 28px; }
   .watermark-tr { top: 28px; right: 28px; }
-  .watermark:hover, .watermark-tr:hover {
+  .watermark-tl { top: 28px; left: 28px; }
+  .watermark:hover, .watermark-tr:hover, .watermark-tl:hover {
     transform: scale(1.15);
     opacity: 0.14;
     filter: url(#fe-turb);
@@ -510,7 +511,38 @@
 </svg>
 
 <svg class="watermark-tr" width="300" height="300" viewBox="0 0 180 180">
-  <circle cx="90" cy="90" r="88" stroke="white" stroke-width="2.5" fill="none"/>
+  <!-- Circle made of horizontal lines, clipped to circle — AT&T style -->
+  <defs><clipPath id="circ"><circle cx="90" cy="90" r="88"/></clipPath></defs>
+  <g clip-path="url(#circ)">
+    <line x1="0" y1="10"  x2="180" y2="10"  stroke="white" stroke-width="2.5"/>
+    <line x1="0" y1="30"  x2="180" y2="30"  stroke="white" stroke-width="2.5"/>
+    <line x1="0" y1="50"  x2="180" y2="50"  stroke="white" stroke-width="2.5"/>
+    <line x1="0" y1="70"  x2="180" y2="70"  stroke="white" stroke-width="2.5"/>
+    <line x1="0" y1="90"  x2="180" y2="90"  stroke="white" stroke-width="2.5"/>
+    <line x1="0" y1="110" x2="180" y2="110" stroke="white" stroke-width="2.5"/>
+    <line x1="0" y1="130" x2="180" y2="130" stroke="white" stroke-width="2.5"/>
+    <line x1="0" y1="150" x2="180" y2="150" stroke="white" stroke-width="2.5"/>
+    <line x1="0" y1="170" x2="180" y2="170" stroke="white" stroke-width="2.5"/>
+  </g>
+</svg>
+
+<svg class="watermark-tl" width="300" height="300" viewBox="0 0 180 180">
+  <!-- Triangle made of left/right orthogonal lines -->
+  <defs><clipPath id="tri"><polygon points="90,5 175,170 5,170"/></clipPath></defs>
+  <g clip-path="url(#tri)">
+    <line x1="0" y1="0"   x2="180" y2="180" stroke="white" stroke-width="2.5"/>
+    <line x1="30" y1="0"  x2="180" y2="150" stroke="white" stroke-width="2.5"/>
+    <line x1="60" y1="0"  x2="180" y2="120" stroke="white" stroke-width="2.5"/>
+    <line x1="90" y1="0"  x2="180" y2="90"  stroke="white" stroke-width="2.5"/>
+    <line x1="180" y1="0"  x2="0"   y2="180" stroke="white" stroke-width="2.5"/>
+    <line x1="150" y1="0"  x2="0"   y2="150" stroke="white" stroke-width="2.5"/>
+    <line x1="120" y1="0"  x2="0"   y2="120" stroke="white" stroke-width="2.5"/>
+    <line x1="90"  y1="0"  x2="0"   y2="90"  stroke="white" stroke-width="2.5"/>
+    <line x1="0"   y1="30" x2="150" y2="180" stroke="white" stroke-width="2.5"/>
+    <line x1="0"   y1="60" x2="120" y2="180" stroke="white" stroke-width="2.5"/>
+    <line x1="30"  y1="180" x2="180" y2="30" stroke="white" stroke-width="2.5"/>
+    <line x1="60"  y1="180" x2="180" y2="60" stroke="white" stroke-width="2.5"/>
+  </g>
 </svg>
 
 <div class="wrap">
