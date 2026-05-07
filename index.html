@@ -155,7 +155,7 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    height: 600px;
+    height: 840px;
     width: auto;
     z-index: 4;
     pointer-events: auto;
@@ -181,7 +181,7 @@
   }
   .statue-wrap img {
     display: block;
-    height: 600px;
+    height: 840px;
     width: auto;
     opacity: 0.22;
     mix-blend-mode: luminosity;
@@ -376,14 +376,16 @@
     letter-spacing: 0.02em; text-transform: uppercase; color: #383838;
   }
 
-  .watermark {
-    position: fixed; bottom: 28px; left: 28px;
+  .watermark, .watermark-tr {
+    position: fixed;
     opacity: 0.08; pointer-events: auto; z-index: 2;
     filter: url(#fe-turb);
     cursor: pointer;
     transition: transform 0.4s ease, opacity 0.4s ease;
   }
-  .watermark:hover {
+  .watermark { bottom: 28px; left: 28px; }
+  .watermark-tr { top: 28px; left: 28px; }
+  .watermark:hover, .watermark-tr:hover {
     transform: scale(1.15);
     opacity: 0.14;
     animation: wm-jiggle 0.3s ease infinite;
@@ -499,12 +501,28 @@
 
 <svg class="watermark" width="300" height="300" viewBox="0 0 180 180">
   <line x1="0"   y1="0"   x2="180" y2="180" stroke="white" stroke-width="2.5"/>
-  <line x1="36"  y1="0"   x2="180" y2="144" stroke="white" stroke-width="2.5"/>
-  <line x1="72"  y1="0"   x2="180" y2="108" stroke="white" stroke-width="2.5"/>
-  <line x1="108" y1="0"   x2="180" y2="72"  stroke="white" stroke-width="2.5"/>
-  <line x1="0"   y1="36"  x2="144" y2="180" stroke="white" stroke-width="2.5"/>
-  <line x1="0"   y1="72"  x2="108" y2="180" stroke="white" stroke-width="2.5"/>
-  <line x1="0"   y1="108" x2="72"  y2="180" stroke="white" stroke-width="2.5"/>
+  <line x1="22"  y1="0"   x2="180" y2="158" stroke="white" stroke-width="2.5"/>
+  <line x1="45"  y1="0"   x2="180" y2="135" stroke="white" stroke-width="2.5"/>
+  <line x1="68"  y1="0"   x2="180" y2="112" stroke="white" stroke-width="2.5"/>
+  <line x1="90"  y1="0"   x2="180" y2="90"  stroke="white" stroke-width="2.5"/>
+  <line x1="0"   y1="22"  x2="158" y2="180" stroke="white" stroke-width="2.5"/>
+  <line x1="0"   y1="45"  x2="135" y2="180" stroke="white" stroke-width="2.5"/>
+  <line x1="0"   y1="68"  x2="112" y2="180" stroke="white" stroke-width="2.5"/>
+  <line x1="0"   y1="90"  x2="90"  y2="180" stroke="white" stroke-width="2.5"/>
+</svg>
+
+<svg class="watermark-tr" width="300" height="300" viewBox="0 0 180 180">
+  <!-- Triple Tau: three T shapes sharing a center, 120° apart, orthogonal lines -->
+  <circle cx="90" cy="90" r="85" stroke="white" stroke-width="2.5" fill="none"/>
+  <!-- Tau 1: vertical down + horizontal across top -->
+  <line x1="90"  y1="5"   x2="90"  y2="90"  stroke="white" stroke-width="2.5"/>
+  <line x1="45"  y1="5"   x2="135" y2="5"   stroke="white" stroke-width="2.5"/>
+  <!-- Tau 2: rotated 120° from center -->
+  <line x1="90"  y1="90"  x2="16"  y2="133" stroke="white" stroke-width="2.5"/>
+  <line x1="3"   y1="95"  x2="54"  y2="158" stroke="white" stroke-width="2.5"/>
+  <!-- Tau 3: rotated 240° from center -->
+  <line x1="90"  y1="90"  x2="164" y2="133" stroke="white" stroke-width="2.5"/>
+  <line x1="126" y1="158" x2="177" y2="95"  stroke="white" stroke-width="2.5"/>
 </svg>
 
 <div class="wrap">
