@@ -342,16 +342,15 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-  .era-trash-btn, .era-eye-btn {
+  .era-trash-btn {
     display: flex; align-items: center; justify-content: center;
     width: 32px; height: 32px;
     color: var(--mid); background: none; border: none;
     padding: 0; cursor: pointer;
     transition: color 0.12s;
   }
-  .era-trash-btn svg, .era-eye-btn svg { width: 28px; height: 28px; }
+  .era-trash-btn svg { width: 28px; height: 28px; }
   .era-trash-btn:hover { color: oklch(0.65 0.22 360); }
-  .era-eye-btn:hover { color: var(--off); }
 
   [data-era="1"] { --era-color: oklch(0.78 0.14 180); }
   [data-era="2"] { --era-color: oklch(0.85 0.18 80); }
@@ -362,6 +361,24 @@
     letter-spacing: 0.04em; text-transform: uppercase; color: var(--off);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     min-width: 0;
+  }
+  .era-eye-inline {
+    display: flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px;
+    color: var(--mid); background: none; border: none;
+    padding: 0; cursor: pointer; flex-shrink: 0;
+    margin-left: 12px;
+    transition: color 0.12s;
+  }
+  .era-eye-inline svg { width: 20px; height: 20px; }
+  .era-eye-inline:hover { color: var(--off); }
+  .era-section-body {
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    max-height: 2000px; opacity: 1;
+  }
+  .era-section-body.collapsed {
+    max-height: 0; opacity: 0;
   }
   .era-years {
     font-family: 'Inter', sans-serif; font-weight: 520;
@@ -409,8 +426,12 @@
     letter-spacing: 0.02em; color: var(--off);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .track.new-row { background: rgba(115, 215, 229, 0.10); }
-  .track.new-row.fade-out { transition: background 3s ease; background: transparent; }
+  .track.new-row { background: rgba(115, 215, 229, 0.25); }
+  .track.new-row.fade-out { transition: background 6s ease; background: transparent; }
+  .track.trashing {
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, padding 0.4s ease;
+    max-height: 0; opacity: 0; padding-top: 0; padding-bottom: 0; overflow: hidden;
+  }
 
   .track-artist {
     font-family: 'Inter', sans-serif; font-weight: 600;
@@ -742,8 +763,9 @@ function removeTrack(row, btn, trackKey) {
   flash(btn, 'active', 500);
   if (trackKey) addDeleted(trackKey);
   setTimeout(function() {
-    row.style.transition = 'opacity 0.3s'; row.style.opacity = '0';
-    setTimeout(function() { row.remove(); }, 300);
+    row.style.maxHeight = row.scrollHeight + 'px';
+    requestAnimationFrame(function() { row.classList.add('trashing'); });
+    setTimeout(function() { row.remove(); }, 500);
   }, 500);
 }
 
@@ -765,8 +787,8 @@ function buildTrackRow(track, i, sectionQuery, isNew) {
   row.className = 'track' + (isNew ? ' new-row' : '');
   row.innerHTML = '<span class="track-num">' + String(i+1).padStart(2,'0') + '</span><div class="track-info"><div class="track-title">' + track.title + '</div><div class="track-artist">' + track.artist + '</div></div><button class="copy-btn" aria-label="Copy">' + ICON_COPY + '</button><button class="play-btn" aria-label="Play">' + ICON_PLAY + '</button><button class="trash-btn" aria-label="Remove">' + ICON_TRASH + '</button>';
   if (isNew) {
-    setTimeout(function() { row.classList.add('fade-out'); }, 2000);
-    setTimeout(function() { row.classList.remove('new-row', 'fade-out'); }, 5000);
+    setTimeout(function() { row.classList.add('fade-out'); }, 3000);
+    setTimeout(function() { row.classList.remove('new-row', 'fade-out'); }, 9000);
   }
   row.querySelector('.copy-btn').addEventListener('click', function(e) {
     e.stopPropagation(); copyText(term, e.currentTarget);
@@ -787,7 +809,7 @@ function buildAiSection(query, songs) {
 
   var hdr = document.createElement('div');
   hdr.className = 'era-header';
-  hdr.innerHTML = '<div class="era-header-inner"><span class="era-title">' + query + '</span><div class="era-actions"><button class="era-eye-btn">' + ICON_EYE + '</button><button class="era-more-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></button><button class="era-trash-btn">' + ICON_TRASH + '</button></div></div>';
+  hdr.innerHTML = '<div class="era-header-inner"><span class="era-title">' + query + '</span><button class="era-eye-inline">' + ICON_EYE + '</button><div class="era-actions"><button class="era-more-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></button><button class="era-trash-btn">' + ICON_TRASH + '</button></div></div>';
   wrapper.appendChild(hdr);
 
   var sec = document.createElement('section');
@@ -808,16 +830,15 @@ function buildAiSection(query, songs) {
     removeSection(wrapper);
   });
 
-  // eye toggle — minimize/expand
-  var eyeBtn = hdr.querySelector('.era-eye-btn');
-  var moreBtn2 = hdr.querySelector('.era-more-btn');
-  var trashBtn2 = hdr.querySelector('.era-trash-btn');
+  // eye toggle — minimize/expand with easing
+  var eyeBtn = hdr.querySelector('.era-eye-inline');
+  var actionsDiv = hdr.querySelector('.era-actions');
+  sec.classList.add('era-section-body');
   var collapsed = false;
   eyeBtn.addEventListener('click', function() {
     collapsed = !collapsed;
-    sec.style.display = collapsed ? 'none' : '';
-    moreBtn2.style.display = collapsed ? 'none' : '';
-    trashBtn2.style.display = collapsed ? 'none' : '';
+    sec.classList.toggle('collapsed', collapsed);
+    actionsDiv.style.display = collapsed ? 'none' : '';
     eyeBtn.innerHTML = collapsed ? ICON_EYE_OFF : ICON_EYE;
   });
 
