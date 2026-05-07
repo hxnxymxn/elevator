@@ -36,30 +36,30 @@
     font-size: 15px;
     line-height: 1.4;
   }
-  /* RIPPLE — layer 0: surface rings, top of page */
+  /* RIPPLE — layer 0: blue oklch rings, pads and centers heading */
   .surface-ripple {
     position: absolute;
-    top: 60px;
+    top: 0;
     left: 50%;
     width: 200vw;
-    height: 60vh;
+    height: 80vh;
     pointer-events: none;
     z-index: 0;
     mix-blend-mode: screen;
     background: radial-gradient(
       ellipse 100% 100% at 50% 50%,
-      rgba(255, 255, 255, 0.038)  0%,
-      rgba(255, 255, 255, 0.000)  9%,
-      rgba(255, 255, 255, 0.030) 18%,
-      rgba(255, 255, 255, 0.000) 27%,
-      rgba(255, 255, 255, 0.025) 35%,
-      rgba(255, 255, 255, 0.000) 45%,
-      rgba(255, 255, 255, 0.020) 53%,
-      rgba(255, 255, 255, 0.000) 62%,
-      rgba(255, 255, 255, 0.015) 70%,
-      rgba(255, 255, 255, 0.000) 80%,
-      rgba(255, 255, 255, 0.010) 88%,
-      rgba(255, 255, 255, 0.000) 100%
+      oklch(0.58 0.04 250 / 0.055)  0%,
+      oklch(0.58 0.04 250 / 0.000)  9%,
+      oklch(0.50 0.04 248 / 0.045) 18%,
+      oklch(0.50 0.04 248 / 0.000) 27%,
+      oklch(0.44 0.035 245 / 0.038) 35%,
+      oklch(0.44 0.035 245 / 0.000) 45%,
+      oklch(0.38 0.03 242 / 0.030) 53%,
+      oklch(0.38 0.03 242 / 0.000) 62%,
+      oklch(0.32 0.025 240 / 0.022) 70%,
+      oklch(0.32 0.025 240 / 0.000) 80%,
+      oklch(0.26 0.02 238 / 0.015) 88%,
+      oklch(0.26 0.02 238 / 0.000) 100%
     );
     -webkit-mask-image: radial-gradient(
       ellipse 50% 50% at 50% 50%,
@@ -81,8 +81,8 @@
     animation: ripple-pulse 14s ease-in-out infinite;
   }
   @keyframes ripple-pulse {
-    0%, 100% { width: 200vw; height: 60vh; }
-    50%      { width: 210vw; height: 62vh; }
+    0%, 100% { width: 200vw; height: 80vh; }
+    50%      { width: 210vw; height: 83vh; }
   }
 
   body {
@@ -247,7 +247,14 @@
     padding: 0 0 100px;
   }
 
-  header { padding: 52px 28px 0; }
+  header {
+    padding: 0 28px;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
   .header-rule      { height: 6px; background: var(--p2); margin-bottom: 1px; }
   .header-rule-thin { height: 1px; background: var(--p1); opacity: 0.22; margin-bottom: 32px; }
 
