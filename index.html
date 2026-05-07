@@ -421,6 +421,8 @@
     font-family: 'Inter', sans-serif; font-weight: 600;
     font-size: 15px; line-height: 16px;
     letter-spacing: 0.04em; text-transform: uppercase; color: var(--off);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    min-width: 0;
   }
   .era-years {
     font-family: 'Inter', sans-serif; font-weight: 520;
@@ -678,7 +680,7 @@
   <div class="hunt-bar">
     <div class="hunt-input-wrap">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      <input type="text" id="hunt-input" placeholder="Describe a song, add it to the list">
+      <input type="text" id="hunt-input" placeholder="Describe some music">
     </div>
     <button class="hunt-btn" id="hunt-btn">Hunt</button>
   </div>
@@ -689,51 +691,27 @@
   <div class="era-header">
     <div class="era-header-inner">
       <span class="era-title">Sun Fringe &middot; Pre-War Threat</span>
-      <span class="era-years">1937 &ndash; 1960</span>
     </div>
   </div>
-  <section>
-    <div class="section-head"><div class="section-label">Billy Lee Riley</div><div class="section-note">Sun&rsquo;s weirder cuts</div></div>
-    <div id="tracks-riley"></div>
-    <div class="section-head"><div class="section-label">Nervous Norvus</div><div class="section-note">Outsider death-novelty</div></div>
-    <div id="tracks-norvus"></div>
-    <div class="section-head"><div class="section-label">Robert Nighthawk</div><div class="section-note">Delta slide threat</div></div>
-    <div id="tracks-nighthawk"></div>
-    <div class="section-head"><div class="section-label">Bobby Blue Bland</div><div class="section-note">Ice ache &middot; other side</div></div>
-    <div id="tracks-bland"></div>
-  </section>
+  <section><div id="tracks-era1"></div></section>
   </div>
 
   <div data-era="2">
   <div class="era-header">
     <div class="era-header-inner">
-      <span class="era-title">Art Damage &middot; Memphis &rarr; Outsider</span>
-      <span class="era-years">1968 &ndash; 1985</span>
+      <span class="era-title">Art Damage &middot; Outsider</span>
     </div>
   </div>
-  <section>
-    <div class="section-head"><div class="section-label">Tav Falco&rsquo;s Panther Burns</div><div class="section-note">Memphis art-wreck</div></div>
-    <div id="tracks-panther"></div>
-    <div class="section-head"><div class="section-label">Legendary Stardust Cowboy</div><div class="section-note">Proto-outsider &middot; pre-punk</div></div>
-    <div id="tracks-ledge"></div>
-    <div class="section-head"><div class="section-label">Eugene Chadbourne</div><div class="section-note">Country protest &middot; Shockabilly</div></div>
-    <div id="tracks-chad"></div>
-  </section>
+  <section><div id="tracks-era2"></div></section>
   </div>
 
   <div data-era="3">
   <div class="era-header">
     <div class="era-header-inner">
-      <span class="era-title">Post-Birthday Party &middot; Drone</span>
-      <span class="era-years">1978 &ndash; 1999</span>
+      <span class="era-title">Post-Punk Drone</span>
     </div>
   </div>
-  <section>
-    <div class="section-head"><div class="section-label">Rowland S. Howard</div><div class="section-note">Post-Birthday Party elegies</div></div>
-    <div id="tracks-rowland"></div>
-    <div class="section-head"><div class="section-label">Flying Saucer Attack</div><div class="section-note">Bristol drone devotional</div></div>
-    <div id="tracks-fsa"></div>
-  </section>
+  <section><div id="tracks-era3"></div></section>
   </div>
 
   <footer>
@@ -747,64 +725,26 @@
 
 <script>
 const DATA = {
-  'tracks-riley': [
+  'tracks-era1': [
     { title: "Flying Saucers Rock and Roll", artist: "Billy Lee Riley" },
     { title: "Red Hot", artist: "Billy Lee Riley" },
-    { title: "Wouldn't You Know", artist: "Billy Lee Riley" },
-    { title: "No Name Girl", artist: "Billy Lee Riley" },
-    { title: "Trouble Bound", artist: "Billy Lee Riley" },
-  ],
-  'tracks-norvus': [
     { title: "Transfusion", artist: "Nervous Norvus" },
-    { title: "Ape Call", artist: "Nervous Norvus" },
-    { title: "The Fang", artist: "Nervous Norvus" },
-  ],
-  'tracks-nighthawk': [
     { title: "Maggie Campbell Blues", artist: "Robert Nighthawk" },
-    { title: "Sweet Black Angel", artist: "Robert Nighthawk" },
-    { title: "Bricks in My Pillow", artist: "Robert Nighthawk" },
-    { title: "Anna Lee", artist: "Robert Nighthawk" },
-  ],
-  'tracks-bland': [
     { title: "I'll Take Care of You", artist: "Bobby Blue Bland" },
-    { title: "Little Boy Blue", artist: "Bobby Blue Bland" },
-    { title: "Lead Me On", artist: "Bobby Blue Bland" },
-    { title: "Cry Cry Cry", artist: "Bobby Blue Bland" },
   ],
-  'tracks-panther': [
+  'tracks-era2': [
     { title: "Snake Rag", artist: "Tav Falco's Panther Burns" },
     { title: "Bourgeois Blues", artist: "Tav Falco's Panther Burns" },
-    { title: "Raunchy", artist: "Tav Falco's Panther Burns" },
-    { title: "Lie Detector", artist: "Tav Falco's Panther Burns" },
-    { title: "Jungle Ride", artist: "Tav Falco's Panther Burns" },
-  ],
-  'tracks-ledge': [
     { title: "Paralyzed", artist: "Legendary Stardust Cowboy" },
-    { title: "Who's Knocking on My Door", artist: "Legendary Stardust Cowboy" },
-    { title: "Kiss and Run", artist: "Legendary Stardust Cowboy" },
-  ],
-  'tracks-chad': [
-    { title: "I Heard It Through the Grapevine", artist: "Shockabilly" },
     { title: "Vietnam", artist: "Shockabilly" },
-    { title: "The Day the Earth Met the Rocket from the Tombs", artist: "Shockabilly" },
-    { title: "There'll Be No Distinction There", artist: "Eugene Chadbourne" },
-    { title: "I've Been Everywhere", artist: "Eugene Chadbourne" },
     { title: "President Reagan", artist: "Eugene Chadbourne" },
-    { title: "Country Music of Southeastern Europe", artist: "Eugene Chadbourne" },
   ],
-  'tracks-rowland': [
+  'tracks-era3': [
     { title: "Shivers", artist: "Rowland S. Howard" },
     { title: "Dead Radio", artist: "Rowland S. Howard" },
-    { title: "I Know a Girl Called Jonny", artist: "Rowland S. Howard" },
-    { title: "Ave Maria", artist: "Rowland S. Howard" },
-    { title: "Silver Dress", artist: "Rowland S. Howard" },
-  ],
-  'tracks-fsa': [
     { title: "Wish", artist: "Flying Saucer Attack" },
     { title: "My Dreaming Hill", artist: "Flying Saucer Attack" },
     { title: "Feedback Song", artist: "Flying Saucer Attack" },
-    { title: "Land Beyond the Sun", artist: "Flying Saucer Attack" },
-    { title: "Here Am I", artist: "Flying Saucer Attack" },
   ],
 };
 
@@ -1000,10 +940,11 @@ function doHunt() {
   .then(function(r) { return r.json(); })
   .then(function(data) {
     if (!data.songs || !data.songs.length) throw new Error('No results');
-    var built = buildAiSection(q, data.songs);
+    var label = data.label || q;
+    var built = buildAiSection(label, data.songs);
     // persist
     var sections = getAiSections();
-    sections.push({ query: q, songs: data.songs });
+    sections.push({ query: label, songs: data.songs });
     saveAiSections(sections);
     aiResults.prepend(built.wrapper);
     huntInput.value = '';

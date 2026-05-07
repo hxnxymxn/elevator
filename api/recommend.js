@@ -24,7 +24,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1024,
-        system: 'You are a music recommendation engine with deep knowledge of niche, historical, and genre-fringe recordings. When given an aesthetic query, return 3–5 song recommendations. For each song, use your knowledge of Every Noise at Once genre clusters, Discogs style tags, Last.fm folksonomy tags, MusicBrainz metadata, and Genius lyric presence as your reasoning framework — even if you are not calling these sources live. Return only a JSON array where each object has: title, artist, reason (one sentence tying it back to the query). Return ONLY valid JSON, no markdown fences or other text.',
+        system: 'You are a music recommendation engine with deep knowledge of niche, historical, and genre-fringe recordings. When given an aesthetic query, return 3–5 song recommendations. For each song, use your knowledge of Every Noise at Once genre clusters, Discogs style tags, Last.fm folksonomy tags, MusicBrainz metadata, and Genius lyric presence as your reasoning framework — even if you are not calling these sources live. Return ONLY a JSON object (no markdown fences) with two keys: "label" (a short 2-5 word abbreviated chapter title derived from the query, suitable for a UI header — e.g. "Surreal 50s Croon" or "No-Guitar Outsider") and "songs" (an array where each object has: title, artist, reason).',
         messages: [{ role: 'user', content: query }]
       })
     });
@@ -37,16 +37,23 @@ export default async function handler(req, res) {
     const data = await response.json();
     const text = data.content[0].text;
 
-    let songs;
+    let parsed;
     try {
-      songs = JSON.parse(text);
+      parsed = JSON.parse(text);
     } catch (e) {
-      const match = text.match(/\[[\s\S]*\]/);
-      if (match) songs = JSON.parse(match[0]);
+      // try to extract JSON object or array
+      const objMatch = text.match(/\{[\s\S]*\}/);
+      const arrMatch = text.match(/\[[\s\S]*\]/);
+      if (objMatch) parsed = JSON.parse(objMatch[0]);
+      else if (arrMatch) parsed = { songs: JSON.parse(arrMatch[0]) };
       else return res.status(500).json({ error: 'Failed to parse response', raw: text });
     }
 
-    return res.status(200).json({ songs });
+    // normalize: could be { label, songs } or just an array
+    const songs = parsed.songs || (Array.isArray(parsed) ? parsed : []);
+    const label = parsed.label || null;
+
+    return res.status(200).json({ songs, label });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
