@@ -335,7 +335,24 @@
     letter-spacing: 0.02em; text-transform: uppercase; color: #383838;
   }
 
-  .watermark { position: fixed; bottom: 28px; left: 28px; opacity: 0.08; pointer-events: none; z-index: 2; filter: url(#fe-turb); }
+  .watermark {
+    position: fixed; bottom: 28px; left: 28px;
+    opacity: 0.08; pointer-events: auto; z-index: 2;
+    filter: url(#fe-turb);
+    cursor: pointer;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+  }
+  .watermark:hover {
+    transform: scale(1.15);
+    opacity: 0.14;
+    animation: wm-jiggle 0.3s ease infinite;
+  }
+  @keyframes wm-jiggle {
+    0%, 100% { translate: 0 0; }
+    25% { translate: 2px -1px; }
+    50% { translate: -1px 2px; }
+    75% { translate: 1px -2px; }
+  }
 
   #toast {
     position: fixed; bottom: 24px; left: 50%%;
@@ -439,14 +456,14 @@
   </defs>
 </svg>
 
-<svg class="watermark" width="180" height="180" viewBox="0 0 180 180">
-  <line x1="0"   y1="0"   x2="180" y2="180" stroke="white" stroke-width="1"/>
-  <line x1="36"  y1="0"   x2="180" y2="144" stroke="white" stroke-width="1"/>
-  <line x1="72"  y1="0"   x2="180" y2="108" stroke="white" stroke-width="1"/>
-  <line x1="108" y1="0"   x2="180" y2="72"  stroke="white" stroke-width="1"/>
-  <line x1="0"   y1="36"  x2="144" y2="180" stroke="white" stroke-width="1"/>
-  <line x1="0"   y1="72"  x2="108" y2="180" stroke="white" stroke-width="1"/>
-  <line x1="0"   y1="108" x2="72"  y2="180" stroke="white" stroke-width="1"/>
+<svg class="watermark" width="300" height="300" viewBox="0 0 180 180">
+  <line x1="0"   y1="0"   x2="180" y2="180" stroke="white" stroke-width="2.5"/>
+  <line x1="36"  y1="0"   x2="180" y2="144" stroke="white" stroke-width="2.5"/>
+  <line x1="72"  y1="0"   x2="180" y2="108" stroke="white" stroke-width="2.5"/>
+  <line x1="108" y1="0"   x2="180" y2="72"  stroke="white" stroke-width="2.5"/>
+  <line x1="0"   y1="36"  x2="144" y2="180" stroke="white" stroke-width="2.5"/>
+  <line x1="0"   y1="72"  x2="108" y2="180" stroke="white" stroke-width="2.5"/>
+  <line x1="0"   y1="108" x2="72"  y2="180" stroke="white" stroke-width="2.5"/>
 </svg>
 
 <div class="wrap">
