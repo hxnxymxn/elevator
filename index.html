@@ -335,7 +335,7 @@
     letter-spacing: 0.02em; text-transform: uppercase; color: #383838;
   }
 
-  .watermark { position: fixed; bottom: 20px; right: 20px; opacity: 0.035; pointer-events: none; z-index: 2; }
+  .watermark { position: fixed; bottom: 28px; left: 28px; opacity: 0.08; pointer-events: none; z-index: 2; filter: url(#fe-turb); }
 
   #toast {
     position: fixed; bottom: 24px; left: 50%%;
@@ -429,6 +429,15 @@
     <use href="#bub" x="90%" y="93%" width="18" height="18" opacity="0.03"/>
   </svg>
 </div>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <filter id="fe-turb">
+      <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" seed="2" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
 
 <svg class="watermark" width="180" height="180" viewBox="0 0 180 180">
   <line x1="0"   y1="0"   x2="180" y2="180" stroke="white" stroke-width="1"/>
