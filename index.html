@@ -775,8 +775,8 @@ function copyText(term, btn) {
 }
 function playTrack(term, btn) {
   flash(btn, 'active', 500);
-  var url = 'https://www.google.com/search?btnI=1&q=site:open.spotify.com+' + encodeURIComponent(term);
-  window.open(url, '_blank');
+  var url = 'https://open.spotify.com/search/' + encodeURIComponent(term);
+  window.open(url, '_blank', 'noopener');
 }
 function removeTrack(row, btn) {
   flash(btn, 'active', 500);
