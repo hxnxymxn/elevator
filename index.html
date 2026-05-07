@@ -300,43 +300,48 @@
     margin-left: auto;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 20px;
   }
   .era-more-btn {
     display: flex; align-items: center; justify-content: center;
     width: 32px; height: 32px;
+    color: #73D7E5;
     background: none; border: none; cursor: pointer;
     padding: 0;
-    opacity: 0.7;
-    transition: opacity 0.12s;
+    transition: color 0.12s;
   }
-  .era-more-btn svg { width: 32px; height: 32px; }
-  .era-more-btn:hover { opacity: 1; }
-  .era-more-btn:hover .more-rest { display: none; }
-  .era-more-btn:hover .more-hover { display: block; }
-  .era-more-btn .more-hover { display: none; }
+  .era-more-btn svg { width: 28px; height: 28px; }
+  .era-more-btn:hover { color: #D4F4FA; }
   .era-more-btn:disabled { opacity: 0.4; cursor: wait; }
   .era-more-btn .loader {
-    width: 26px; height: 26px;
-    display: inline-block; position: relative;
+    width: 28px; height: 28px;
+    position: relative;
+    border-radius: 4px;
+    background-color: transparent;
+    background-image:
+      radial-gradient(circle 2.5px, #f7f7f7 100%, transparent 0),
+      radial-gradient(circle 2.5px, #f7f7f7 100%, transparent 0),
+      radial-gradient(circle 2.5px, #f7f7f7 100%, transparent 0),
+      radial-gradient(circle 2.5px, #f7f7f7 100%, transparent 0),
+      radial-gradient(circle 2.5px, #f7f7f7 100%, transparent 0),
+      radial-gradient(circle 2.5px, #f7f7f7 100%, transparent 0);
+    background-repeat: no-repeat;
+    animation: era-move 4s linear infinite, era-rotate 2s linear infinite;
   }
-  .era-more-btn .loader::after,
-  .era-more-btn .loader::before {
-    content: '';
-    box-sizing: border-box;
-    width: 26px; height: 26px;
-    border: 2px solid #FFF;
-    position: absolute;
-    left: 0; top: 0;
-    animation: scaleOut 2s ease-in-out infinite;
+  @keyframes era-rotate {
+    0%, 20% { transform: rotate(0deg); }
+    30%, 40% { transform: rotate(90deg); }
+    50%, 60% { transform: rotate(180deg); }
+    70%, 80% { transform: rotate(270deg); }
+    90%, 100% { transform: rotate(360deg); }
   }
-  .era-more-btn .loader::after {
-    border-color: #FA5ABE;
-    animation-delay: 1s;
-  }
-  @keyframes scaleOut {
-    0% { transform: scale(0); }
-    100% { transform: scale(1); }
+  @keyframes era-move {
+    0%, 9% { background-position: -6px -8px, -6px 0px, -6px 8px, 6px -8px, 6px 0px, 6px 8px; }
+    10%, 25% { background-position: 0px -8px, -6px 0px, -6px 8px, 18px -8px, 6px 0px, 6px 8px; }
+    30%, 45% { background-position: 0px -18px, -6px -5px, -6px 6px, 18px -8px, 6px -5px, 6px 6px; }
+    50%, 65% { background-position: 0px -18px, -6px -18px, -6px 6px, 18px -6px, 0px -5px, 6px 6px; }
+    70%, 85% { background-position: 0px -18px, -6px -18px, 0px 6px, 18px -6px, 0px -5px, 18px 6px; }
+    90%, 100% { background-position: 0px -18px, -6px -18px, 0px 0px, 18px -6px, 0px 0px, 18px 6px; }
   }
   .era-trash-btn {
     display: flex; align-items: center; justify-content: center;
@@ -773,7 +778,7 @@ function buildAiSection(query, songs) {
 
   var hdr = document.createElement('div');
   hdr.className = 'era-header';
-  hdr.innerHTML = '<div class="era-header-inner"><span class="era-title">' + query + '</span><div class="era-actions"><button class="era-more-btn"><svg class="more-rest" width="30" height="22" viewBox="0 0 30 22" fill="none"><path d="M29.9989 22H16.1133V17.3521H20.4333V5.76338L16.175 6.6V1.85915L25.679 0V17.3521H29.9989V22Z" fill="white"/><path d="M9.44225 8.88226H13.8857V13.5301H9.44225V18.178H4.50513V13.5301H0V8.88226H4.50513V4.23438H9.44225V8.88226Z" fill="white"/></svg><svg class="more-hover" width="44" height="44" viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="4" fill="#FA5ABE"/><path d="M36.8466 33H22.9609V28.3521H27.2809V16.7634L23.0227 17.6V12.8592L32.5266 11V28.3521H36.8466V33Z" fill="white"/><path d="M16.2899 19.8823H20.7333V24.5301H16.2899V29.178H11.3528V24.5301H6.84766V19.8823H11.3528V15.2344H16.2899V19.8823Z" fill="white"/></svg></button><button class="era-trash-btn">' + ICON_TRASH + '</button></div></div>';
+  hdr.innerHTML = '<div class="era-header-inner"><span class="era-title">' + query + '</span><div class="era-actions"><button class="era-more-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v8"/><path d="M8 12h8"/><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0z"/></svg></button><button class="era-trash-btn">' + ICON_TRASH + '</button></div></div>';
   wrapper.appendChild(hdr);
 
   var sec = document.createElement('section');
