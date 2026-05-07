@@ -326,7 +326,7 @@
   }
 
   .track {
-    display: grid; grid-template-columns: 28px 1fr auto;
+    display: grid; grid-template-columns: 28px 1fr auto auto;
     align-items: center; gap: 10px 16px;
     padding: 11px 0; border-bottom: 1px solid #1C1C1C; position: relative;
     cursor: pointer;
@@ -335,7 +335,7 @@
     background: oklch(0.80 0.16 78 / 0.04);
     margin: 0 -10px; padding-left: 10px; padding-right: 10px;
   }
-  .track:hover .copy-btn { color: var(--off); }
+  .track:hover .copy-btn, .track:hover .play-btn { color: var(--off); }
   .track-num {
     font-family: 'JetBrains Mono', monospace; font-weight: 500;
     font-size: 17px; line-height: 1;
@@ -357,15 +357,15 @@
     color: var(--mid); margin-top: 5px;
   }
 
-  .copy-btn {
+  .copy-btn, .play-btn {
     display: flex; align-items: center; justify-content: center;
     width: 28px; height: 28px;
     color: var(--mid); background: none; border: none;
     padding: 0; cursor: pointer;
     transition: color 0.12s ease; flex-shrink: 0;
   }
-  .copy-btn svg { width: 28px; height: 28px; }
-  .copy-btn:hover { color: var(--off); }
+  .copy-btn svg, .play-btn svg { width: 28px; height: 28px; }
+  .copy-btn:hover, .play-btn:hover { color: var(--off); }
   .copy-btn.copied { color: var(--p2); }
 
   footer { padding: 52px 28px 0; display: flex; align-items: center; gap: 16px; }
@@ -679,8 +679,10 @@ const DATA = {
 let toastTimer;
 var ICON_COPY = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
 var ICON_CHECK = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-function copyText(text, btn) {
-  navigator.clipboard.writeText(text).then(() => {
+var ICON_WAVE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 32" fill="currentColor"><path d="M18 0C18.9688 0 19.8 0.69375 19.9688 1.65L22.9312 18.2437L25.025 5.675C25.1812 4.7375 25.9688 4.04375 26.9188 4.00625C27.8688 3.96875 28.7062 4.6 28.9375 5.51875L31.5625 16H33C34.1063 16 35 16.8937 35 18C35 19.1063 34.1063 20 33 20H30C29.0813 20 28.2812 19.375 28.0625 18.4875L27.3937 15.8125L24.975 30.3312C24.8125 31.2937 23.9875 31.9937 23.0125 32C22.0375 32.0063 21.2 31.3125 21.0312 30.35L18 13.375L14.9688 30.35C14.8 31.3063 13.9625 32.0063 12.9875 32C12.0125 31.9937 11.1875 31.2875 11.025 30.3312L8.60625 15.8125L7.9375 18.4875C7.71875 19.375 6.91875 20 6 20H3C1.89375 20 1 19.1063 1 18C1 16.8937 1.89375 16 3 16H4.4375L7.0625 5.5125C7.29375 4.59375 8.1375 3.9625 9.08125 4C10.025 4.0375 10.8188 4.7375 10.975 5.66875L13.0688 18.2375L16.0312 1.64375C16.2 0.69375 17.0312 0 18 0Z"/></svg>';
+function copyText(term, btn) {
+  var url = 'https://open.spotify.com/search/' + encodeURIComponent(term);
+  navigator.clipboard.writeText(url).then(() => {
     btn.innerHTML = ICON_CHECK;
     btn.classList.add('copied');
     setTimeout(() => { btn.innerHTML = ICON_COPY; btn.classList.remove('copied'); }, 1400);
@@ -690,6 +692,10 @@ function copyText(text, btn) {
     toastTimer = setTimeout(() => toast.classList.remove('show'), 1600);
   });
 }
+function playTrack(term) {
+  var url = 'https://www.google.com/search?btnI=1&q=site:open.spotify.com+' + encodeURIComponent(term);
+  window.open(url, '_blank');
+}
 
 Object.entries(DATA).forEach(([id, tracks]) => {
   const container = document.getElementById(id);
@@ -698,7 +704,7 @@ Object.entries(DATA).forEach(([id, tracks]) => {
     const term = track.title + ' ' + track.artist;
     const row = document.createElement('div');
     row.className = 'track';
-    row.innerHTML = '<span class="track-num">' + String(i+1).padStart(2,'0') + '</span><div class="track-info"><div class="track-title">' + track.title + '</div><div class="track-artist">' + track.artist + '</div></div><button class="copy-btn" aria-label="Copy ' + term + '">' + ICON_COPY + '</button>';
+    row.innerHTML = '<span class="track-num">' + String(i+1).padStart(2,'0') + '</span><div class="track-info"><div class="track-title">' + track.title + '</div><div class="track-artist">' + track.artist + '</div></div><button class="copy-btn" aria-label="Copy ' + term + '">' + ICON_COPY + '</button><button class="play-btn" aria-label="Play ' + term + '">' + ICON_WAVE + '</button>';
     row.addEventListener('click', () => {
       const btn = row.querySelector('.copy-btn');
       copyText(term, btn);
@@ -706,6 +712,10 @@ Object.entries(DATA).forEach(([id, tracks]) => {
     row.querySelector('.copy-btn').addEventListener('click', e => {
       e.stopPropagation();
       copyText(term, e.currentTarget);
+    });
+    row.querySelector('.play-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      playTrack(term);
     });
     container.appendChild(row);
   });
