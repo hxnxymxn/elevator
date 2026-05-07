@@ -330,9 +330,7 @@
     background: oklch(0.80 0.15 170 / 0.04);
     margin: 0 -10px; padding-left: 10px; padding-right: 10px;
   }
-  .track:hover .copy-btn {
-    color: var(--off); border-color: var(--p2); background: oklch(0.80 0.15 170 / 0.07);
-  }
+  .track:hover .copy-btn { color: var(--off); }
   .track-num {
     font-family: 'JetBrains Mono', monospace; font-weight: 500;
     font-size: 17px; line-height: 1;
@@ -355,16 +353,15 @@
   }
 
   .copy-btn {
-    font-family: 'Inter', sans-serif;
-    font-size: 15px; font-weight: 520;
-    letter-spacing: 0.02em; text-transform: uppercase;
-    color: var(--off); background: none; border: 1px solid var(--rule);
-    padding: 5px 9px; cursor: pointer; white-space: nowrap;
-    transition: all 0.12s ease; flex-shrink: 0;
-    clip-path: polygon(0 0, calc(100%% - 5px) 0, 100%% 5px, 100%% 100%%, 0 100%%);
+    display: flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px;
+    color: var(--mid); background: none; border: none;
+    padding: 0; cursor: pointer;
+    transition: color 0.12s ease; flex-shrink: 0;
   }
-  .copy-btn:hover  { color: var(--off); border-color: var(--p2); background: oklch(0.80 0.15 170 / 0.07); }
-  .copy-btn.copied { color: var(--p1); border-color: var(--p1); background: oklch(0.88 0.12 170 / 0.06); }
+  .copy-btn svg { width: 16px; height: 16px; }
+  .copy-btn:hover { color: var(--off); }
+  .copy-btn.copied { color: var(--p2); }
 
   footer { padding: 52px 28px 0; display: flex; align-items: center; gap: 16px; }
   .footer-line { flex: 1; height: 1px; background: var(--rule); }
@@ -609,12 +606,14 @@ const DATA = {
 };
 
 let toastTimer;
+var ICON_COPY = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
+var ICON_CHECK = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
 function copyText(text, btn) {
   navigator.clipboard.writeText(text).then(() => {
-    btn.textContent = '\u2713';
+    btn.innerHTML = ICON_CHECK;
     btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 1400);
-    const toast = document.getElementById('toast');
+    setTimeout(() => { btn.innerHTML = ICON_COPY; btn.classList.remove('copied'); }, 1400);
+    var toast = document.getElementById('toast');
     toast.classList.add('show');
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toast.classList.remove('show'), 1600);
@@ -628,7 +627,7 @@ Object.entries(DATA).forEach(([id, tracks]) => {
     const term = track.title + ' ' + track.artist;
     const row = document.createElement('div');
     row.className = 'track';
-    row.innerHTML = '<span class="track-num">' + String(i+1).padStart(2,'0') + '</span><div class="track-info"><div class="track-title">' + track.title + '</div><div class="track-artist">' + track.artist + '</div></div><button class="copy-btn" aria-label="Copy ' + term + '">copy</button>';
+    row.innerHTML = '<span class="track-num">' + String(i+1).padStart(2,'0') + '</span><div class="track-info"><div class="track-title">' + track.title + '</div><div class="track-artist">' + track.artist + '</div></div><button class="copy-btn" aria-label="Copy ' + term + '">' + ICON_COPY + '</button>';
     row.addEventListener('click', () => {
       const btn = row.querySelector('.copy-btn');
       copyText(term, btn);
