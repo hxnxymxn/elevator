@@ -219,11 +219,7 @@
   .title-row {
     display: flex; align-items: center; gap: 12px;
     white-space: nowrap;
-  }
-  .title-icon {
-    height: 0.68em;
-    width: auto;
-    flex-shrink: 0;
+    font-size: clamp(48px, 12vw, 96px);
   }
   .title-icon path { fill: currentColor; }
   h1 {
@@ -233,6 +229,11 @@
     letter-spacing: -0.02em;
     line-height: 0.88;
     color: var(--off);
+  }
+  .title-icon {
+    height: 0.68em;
+    width: auto;
+    flex-shrink: 0;
   }
 
 
