@@ -342,15 +342,16 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-  .era-trash-btn {
+  .era-trash-btn, .era-eye-btn {
     display: flex; align-items: center; justify-content: center;
     width: 32px; height: 32px;
     color: var(--mid); background: none; border: none;
     padding: 0; cursor: pointer;
     transition: color 0.12s;
   }
-  .era-trash-btn svg { width: 28px; height: 28px; }
+  .era-trash-btn svg, .era-eye-btn svg { width: 28px; height: 28px; }
   .era-trash-btn:hover { color: oklch(0.65 0.22 360); }
+  .era-eye-btn:hover { color: var(--off); }
 
   [data-era="1"] { --era-color: oklch(0.78 0.14 180); }
   [data-era="2"] { --era-color: oklch(0.85 0.18 80); }
@@ -689,6 +690,8 @@ var ICON_COPY = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fil
 var ICON_COPY_CHECK = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15L14 17L18 13"/><path d="M20 8H10C8.89543 8 8 8.89543 8 10V20C8 21.1046 8.89543 22 10 22H20C21.1046 22 22 21.1046 22 20V10C22 8.89543 21.1046 8 20 8Z"/><path d="M4 16C2.9 16 2 15.1 2 14V4C2 2.9 2.9 2 4 2H14C15.1 2 16 2.9 16 4"/></svg>';
 var ICON_PLAY = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5.00059C4.9999 4.64868 5.09265 4.30298 5.26888 3.99838C5.44512 3.69379 5.69861 3.44108 6.00375 3.26579C6.30889 3.09049 6.65488 2.99882 7.00679 3.00001C7.3587 3.00121 7.70406 3.09523 8.008 3.27259L20.005 10.2706C20.3078 10.4463 20.5591 10.6983 20.7339 11.0016C20.9088 11.3049 21.0009 11.6487 21.0012 11.9987C21.0015 12.3488 20.91 12.6928 20.7357 12.9963C20.5614 13.2999 20.3105 13.5524 20.008 13.7286L8.008 20.7286C7.70406 20.906 7.3587 21 7.00679 21.0012C6.65488 21.0024 6.30889 20.9107 6.00375 20.7354C5.69861 20.5601 5.44512 20.3074 5.26888 20.0028C5.09265 19.6982 4.9999 19.3525 5 19.0006V5.00059Z"/></svg>';
 var ICON_TRASH = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11V17"/><path d="M14 11V17"/><path d="M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6"/><path d="M3 6H21"/><path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6"/></svg>';
+var ICON_EYE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>';
+var ICON_EYE_OFF = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="m14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></svg>';
 
 function flash(btn, cls, dur) {
   btn.classList.add(cls);
@@ -784,7 +787,7 @@ function buildAiSection(query, songs) {
 
   var hdr = document.createElement('div');
   hdr.className = 'era-header';
-  hdr.innerHTML = '<div class="era-header-inner"><span class="era-title">' + query + '</span><div class="era-actions"><button class="era-more-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></button><button class="era-trash-btn">' + ICON_TRASH + '</button></div></div>';
+  hdr.innerHTML = '<div class="era-header-inner"><span class="era-title">' + query + '</span><div class="era-actions"><button class="era-eye-btn">' + ICON_EYE + '</button><button class="era-more-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></button><button class="era-trash-btn">' + ICON_TRASH + '</button></div></div>';
   wrapper.appendChild(hdr);
 
   var sec = document.createElement('section');
@@ -803,6 +806,19 @@ function buildAiSection(query, songs) {
   // section trash
   hdr.querySelector('.era-trash-btn').addEventListener('click', function() {
     removeSection(wrapper);
+  });
+
+  // eye toggle — minimize/expand
+  var eyeBtn = hdr.querySelector('.era-eye-btn');
+  var moreBtn2 = hdr.querySelector('.era-more-btn');
+  var trashBtn2 = hdr.querySelector('.era-trash-btn');
+  var collapsed = false;
+  eyeBtn.addEventListener('click', function() {
+    collapsed = !collapsed;
+    sec.style.display = collapsed ? 'none' : '';
+    moreBtn2.style.display = collapsed ? 'none' : '';
+    trashBtn2.style.display = collapsed ? 'none' : '';
+    eyeBtn.innerHTML = collapsed ? ICON_EYE_OFF : ICON_EYE;
   });
 
   // one more
