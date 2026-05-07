@@ -351,11 +351,39 @@
   .era-header { padding: 36px 28px 0; }
   .era-header-inner {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 12px;
     padding-bottom: 10px;
     border-bottom: 2px solid var(--era-color, var(--p2));
   }
+  .era-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .era-more-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px; font-weight: 520;
+    letter-spacing: 0.02em; text-transform: uppercase;
+    color: var(--era-color, var(--p2));
+    background: none; border: none; cursor: pointer;
+    padding: 2px 0;
+    opacity: 0.7;
+    transition: opacity 0.12s;
+    white-space: nowrap;
+  }
+  .era-more-btn:hover { opacity: 1; }
+  .era-more-btn:disabled { opacity: 0.3; cursor: wait; }
+  .era-trash-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px;
+    color: var(--mid); background: none; border: none;
+    padding: 0; cursor: pointer;
+    transition: color 0.12s;
+  }
+  .era-trash-btn svg { width: 18px; height: 18px; }
+  .era-trash-btn:hover { color: oklch(0.65 0.22 360); }
 
   [data-era="1"] { --era-color: oklch(0.78 0.14 180); }
   [data-era="2"] { --era-color: oklch(0.85 0.18 80); }
@@ -779,61 +807,156 @@ function playTrack(term, btn) {
   var url = 'https://open.spotify.com/search/' + encodeURIComponent(term);
   window.open(url, '_blank', 'noopener');
 }
-function removeTrack(row, btn) {
-  flash(btn, 'active', 500);
-  setTimeout(function() { row.style.transition = 'opacity 0.3s'; row.style.opacity = '0'; setTimeout(function() { row.remove(); }, 300); }, 500);
+// Persistence
+var DELETED_KEY = 'elevator_deleted';
+var DELETED_SECTIONS_KEY = 'elevator_deleted_sections';
+var AI_SECTIONS_KEY = 'elevator_ai_sections';
+
+function getDeleted() {
+  try { return JSON.parse(localStorage.getItem(DELETED_KEY) || '[]'); } catch(e) { return []; }
+}
+function addDeleted(key) {
+  var d = getDeleted(); d.push(key); localStorage.setItem(DELETED_KEY, JSON.stringify(d));
+}
+function getDeletedSections() {
+  try { return JSON.parse(localStorage.getItem(DELETED_SECTIONS_KEY) || '[]'); } catch(e) { return []; }
+}
+function addDeletedSection(key) {
+  var d = getDeletedSections(); d.push(key); localStorage.setItem(DELETED_SECTIONS_KEY, JSON.stringify(d));
+}
+function getAiSections() {
+  try { return JSON.parse(localStorage.getItem(AI_SECTIONS_KEY) || '[]'); } catch(e) { return []; }
+}
+function saveAiSections(sections) {
+  localStorage.setItem(AI_SECTIONS_KEY, JSON.stringify(sections));
 }
 
-Object.entries(DATA).forEach(([id, tracks]) => {
-  const container = document.getElementById(id);
-  if (!container) return;
-  tracks.forEach((track, i) => {
-    const term = track.title + ' ' + track.artist;
-    const row = document.createElement('div');
-    row.className = 'track';
-    row.innerHTML = '<span class="track-num">' + String(i+1).padStart(2,'0') + '</span><div class="track-info"><div class="track-title">' + track.title + '</div><div class="track-artist">' + track.artist + '</div></div><button class="copy-btn" aria-label="Copy ' + term + '">' + ICON_COPY + '</button><button class="play-btn" aria-label="Play ' + term + '">' + ICON_PLAY + '</button><button class="trash-btn" aria-label="Remove ' + term + '">' + ICON_TRASH + '</button>';
-    row.querySelector('.copy-btn').addEventListener('click', function(e) {
-      e.stopPropagation();
-      copyText(term, e.currentTarget);
-    });
-    row.querySelector('.play-btn').addEventListener('click', function(e) {
-      e.stopPropagation();
-      playTrack(term, e.currentTarget);
-    });
-    row.querySelector('.trash-btn').addEventListener('click', function(e) {
-      e.stopPropagation();
-      removeTrack(row, e.currentTarget);
-    });
-    container.appendChild(row);
-  });
-});
+function removeTrack(row, btn, trackKey) {
+  flash(btn, 'active', 500);
+  if (trackKey) addDeleted(trackKey);
+  setTimeout(function() {
+    row.style.transition = 'opacity 0.3s'; row.style.opacity = '0';
+    setTimeout(function() { row.remove(); }, 300);
+  }, 500);
+}
 
-// Hunt — AI recommendations
-var huntInput = document.getElementById('hunt-input');
-var huntBtn = document.getElementById('hunt-btn');
-var aiResults = document.getElementById('ai-results');
-var aiQueryCount = 0;
+function removeSection(wrapper) {
+  var title = wrapper.querySelector('.era-title');
+  if (title) addDeletedSection(title.textContent);
+  // also remove from AI sections storage
+  var sections = getAiSections();
+  sections = sections.filter(function(s) { return s.query !== (title ? title.textContent : ''); });
+  saveAiSections(sections);
+  wrapper.style.transition = 'opacity 0.3s'; wrapper.style.opacity = '0';
+  setTimeout(function() { wrapper.remove(); }, 300);
+}
 
-function buildTrackRow(track, i) {
+function buildTrackRow(track, i, sectionQuery) {
   var term = track.title + ' ' + track.artist;
+  var trackKey = (sectionQuery || '') + '::' + term;
   var row = document.createElement('div');
   row.className = 'track';
-  row.innerHTML = '<span class="track-num">' + String(i+1).padStart(2,'0') + '</span><div class="track-info"><div class="track-title">' + track.title + '</div><div class="track-artist">' + track.artist + '</div></div><button class="copy-btn" aria-label="Copy ' + term + '">' + ICON_COPY + '</button><button class="play-btn" aria-label="Play ' + term + '">' + ICON_PLAY + '</button><button class="trash-btn" aria-label="Remove ' + term + '">' + ICON_TRASH + '</button>';
+  row.innerHTML = '<span class="track-num">' + String(i+1).padStart(2,'0') + '</span><div class="track-info"><div class="track-title">' + track.title + '</div><div class="track-artist">' + track.artist + '</div></div><button class="copy-btn" aria-label="Copy">' + ICON_COPY + '</button><button class="play-btn" aria-label="Play">' + ICON_PLAY + '</button><button class="trash-btn" aria-label="Remove">' + ICON_TRASH + '</button>';
   row.querySelector('.copy-btn').addEventListener('click', function(e) {
-    e.stopPropagation();
-    copyText(term, e.currentTarget);
+    e.stopPropagation(); copyText(term, e.currentTarget);
   });
   row.querySelector('.play-btn').addEventListener('click', function(e) {
-    e.stopPropagation();
-    playTrack(term, e.currentTarget);
+    e.stopPropagation(); playTrack(term, e.currentTarget);
   });
   row.querySelector('.trash-btn').addEventListener('click', function(e) {
-    e.stopPropagation();
-    removeTrack(row, e.currentTarget);
+    e.stopPropagation(); removeTrack(row, e.currentTarget, trackKey);
   });
   return row;
 }
 
+function buildAiSection(query, songs) {
+  var deleted = getDeleted();
+  var wrapper = document.createElement('div');
+  wrapper.setAttribute('data-era', 'ai');
+
+  var hdr = document.createElement('div');
+  hdr.className = 'era-header';
+  hdr.innerHTML = '<div class="era-header-inner"><span class="era-title">' + query + '</span><div class="era-actions"><button class="era-more-btn">+ one more</button><button class="era-trash-btn">' + ICON_TRASH + '</button></div></div>';
+  wrapper.appendChild(hdr);
+
+  var sec = document.createElement('section');
+  sec.style.padding = '0 28px';
+  var count = 0;
+  songs.forEach(function(song) {
+    var term = song.title + ' ' + song.artist;
+    var trackKey = query + '::' + term;
+    if (deleted.indexOf(trackKey) === -1) {
+      sec.appendChild(buildTrackRow(song, count, query));
+      count++;
+    }
+  });
+  wrapper.appendChild(sec);
+
+  // section trash
+  hdr.querySelector('.era-trash-btn').addEventListener('click', function() {
+    removeSection(wrapper);
+  });
+
+  // one more
+  var moreBtn = hdr.querySelector('.era-more-btn');
+  moreBtn.addEventListener('click', function() {
+    moreBtn.disabled = true;
+    moreBtn.textContent = '\u2026';
+    fetch('/api/recommend', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: query + ' (give me 1 more song, different from: ' + songs.map(function(s) { return s.title; }).join(', ') + ')' })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data.songs || !data.songs.length) throw new Error('No results');
+      var newSong = data.songs[0];
+      songs.push(newSong);
+      // persist
+      var sections = getAiSections();
+      var found = false;
+      sections.forEach(function(s) { if (s.query === query) { s.songs = songs; found = true; } });
+      if (!found) sections.push({ query: query, songs: songs });
+      saveAiSections(sections);
+      var idx = sec.querySelectorAll('.track').length;
+      sec.appendChild(buildTrackRow(newSong, idx, query));
+    })
+    .catch(function(err) { alert('Failed: ' + err.message); })
+    .finally(function() { moreBtn.disabled = false; moreBtn.textContent = '+ one more'; });
+  });
+
+  return { wrapper: wrapper, songs: songs };
+}
+
+// Render hardcoded tracks
+var deleted = getDeleted();
+var deletedSections = getDeletedSections();
+
+Object.entries(DATA).forEach(function(entry) {
+  var id = entry[0]; var tracks = entry[1];
+  var container = document.getElementById(id);
+  if (!container) return;
+  tracks.forEach(function(track, i) {
+    var term = track.title + ' ' + track.artist;
+    var trackKey = id + '::' + term;
+    if (deleted.indexOf(trackKey) !== -1) return;
+    var row = buildTrackRow(track, i, id);
+    container.appendChild(row);
+  });
+});
+
+// Restore saved AI sections
+var huntInput = document.getElementById('hunt-input');
+var huntBtn = document.getElementById('hunt-btn');
+var aiResults = document.getElementById('ai-results');
+
+getAiSections().forEach(function(s) {
+  if (deletedSections.indexOf(s.query) !== -1) return;
+  var built = buildAiSection(s.query, s.songs);
+  aiResults.appendChild(built.wrapper);
+});
+
+// Hunt
 function doHunt() {
   var q = huntInput.value.trim();
   if (!q) return;
@@ -849,25 +972,15 @@ function doHunt() {
   .then(function(r) { return r.json(); })
   .then(function(data) {
     if (!data.songs || !data.songs.length) throw new Error('No results');
-    aiQueryCount++;
-    var wrapper = document.createElement('div');
-    wrapper.setAttribute('data-era', 'ai');
-    var hdr = document.createElement('div');
-    hdr.className = 'era-header';
-    hdr.innerHTML = '<div class="era-header-inner"><span class="era-title">' + q + '</span><span class="era-years">AI RECOMMENDATION</span></div>';
-    wrapper.appendChild(hdr);
-    var sec = document.createElement('section');
-    sec.style.padding = '0 28px';
-    data.songs.forEach(function(song, i) {
-      sec.appendChild(buildTrackRow(song, i));
-    });
-    wrapper.appendChild(sec);
-    aiResults.prepend(wrapper);
+    var built = buildAiSection(q, data.songs);
+    // persist
+    var sections = getAiSections();
+    sections.push({ query: q, songs: data.songs });
+    saveAiSections(sections);
+    aiResults.prepend(built.wrapper);
     huntInput.value = '';
   })
-  .catch(function(err) {
-    alert('Hunt failed: ' + err.message);
-  })
+  .catch(function(err) { alert('Hunt failed: ' + err.message); })
   .finally(function() {
     huntBtn.disabled = false;
     huntBtn.classList.remove('loading');
@@ -876,9 +989,7 @@ function doHunt() {
 }
 
 huntBtn.addEventListener('click', doHunt);
-huntInput.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') doHunt();
-});
+huntInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') doHunt(); });
 
 </script>
 </body>
