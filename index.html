@@ -379,15 +379,15 @@
   .watermark, .watermark-tr {
     position: fixed;
     opacity: 0.08; pointer-events: auto; z-index: 2;
-    filter: url(#fe-turb);
     cursor: pointer;
-    transition: transform 0.4s ease, opacity 0.4s ease;
+    transition: transform 0.4s ease, opacity 0.4s ease, filter 0.3s ease;
   }
   .watermark { bottom: 28px; left: 28px; }
-  .watermark-tr { top: 28px; left: 28px; }
+  .watermark-tr { top: 28px; right: 28px; }
   .watermark:hover, .watermark-tr:hover {
     transform: scale(1.15);
     opacity: 0.14;
+    filter: url(#fe-turb);
     animation: wm-jiggle 0.3s ease infinite;
   }
   @keyframes wm-jiggle {
@@ -512,17 +512,7 @@
 </svg>
 
 <svg class="watermark-tr" width="300" height="300" viewBox="0 0 180 180">
-  <!-- Triple Tau: three T shapes sharing a center, 120° apart, orthogonal lines -->
-  <circle cx="90" cy="90" r="85" stroke="white" stroke-width="2.5" fill="none"/>
-  <!-- Tau 1: vertical down + horizontal across top -->
-  <line x1="90"  y1="5"   x2="90"  y2="90"  stroke="white" stroke-width="2.5"/>
-  <line x1="45"  y1="5"   x2="135" y2="5"   stroke="white" stroke-width="2.5"/>
-  <!-- Tau 2: rotated 120° from center -->
-  <line x1="90"  y1="90"  x2="16"  y2="133" stroke="white" stroke-width="2.5"/>
-  <line x1="3"   y1="95"  x2="54"  y2="158" stroke="white" stroke-width="2.5"/>
-  <!-- Tau 3: rotated 240° from center -->
-  <line x1="90"  y1="90"  x2="164" y2="133" stroke="white" stroke-width="2.5"/>
-  <line x1="126" y1="158" x2="177" y2="95"  stroke="white" stroke-width="2.5"/>
+  <circle cx="90" cy="90" r="88" stroke="white" stroke-width="2.5" fill="none"/>
 </svg>
 
 <div class="wrap">
