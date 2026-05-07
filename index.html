@@ -36,36 +36,53 @@
     font-size: 15px;
     line-height: 1.4;
   }
-  html::before {
-    content: '';
+  /* RIPPLE — layer 0: surface rings, top of page */
+  .surface-ripple {
     position: absolute;
-    inset: 0;
-    z-index: 0;
+    top: 60px;
+    left: 50%;
+    width: 200vw;
+    height: 60vh;
     pointer-events: none;
-    background-image:
-      radial-gradient(
-        ellipse 50%% 50%% at 50%% 50%%,
-        rgba(255,255,255,0.038) 0%%,   rgba(255,255,255,0.000) 9%%,
-        rgba(255,255,255,0.030) 18%%, rgba(255,255,255,0.000) 27%%,
-        rgba(255,255,255,0.025) 35%%, rgba(255,255,255,0.000) 45%%,
-        rgba(255,255,255,0.020) 53%%, rgba(255,255,255,0.000) 62%%,
-        rgba(255,255,255,0.015) 70%%, rgba(255,255,255,0.000) 80%%,
-        rgba(255,255,255,0.010) 88%%, rgba(255,255,255,0.000) 100%%
-      ),
-      linear-gradient(
-        to bottom,
-        #080808 0%%, #060A0D 3%%, #11161A 8%%, #0D1115 18%%,
-        #080D10 30%%, #030507 48%%, #010304 92%%, #080808 100%%
-      );
-    background-repeat: no-repeat, no-repeat;
-    background-size: 200vw 60vh, 100%% 100%%;
-    background-position: 50%% 60px, 0 0;
-    background-blend-mode: screen, normal;
+    z-index: 0;
+    mix-blend-mode: screen;
+    background: radial-gradient(
+      ellipse 100% 100% at 50% 50%,
+      rgba(255, 255, 255, 0.038)  0%,
+      rgba(255, 255, 255, 0.000)  9%,
+      rgba(255, 255, 255, 0.030) 18%,
+      rgba(255, 255, 255, 0.000) 27%,
+      rgba(255, 255, 255, 0.025) 35%,
+      rgba(255, 255, 255, 0.000) 45%,
+      rgba(255, 255, 255, 0.020) 53%,
+      rgba(255, 255, 255, 0.000) 62%,
+      rgba(255, 255, 255, 0.015) 70%,
+      rgba(255, 255, 255, 0.000) 80%,
+      rgba(255, 255, 255, 0.010) 88%,
+      rgba(255, 255, 255, 0.000) 100%
+    );
+    -webkit-mask-image: radial-gradient(
+      ellipse 50% 50% at 50% 50%,
+      rgba(0,0,0,1.00)  0%,
+      rgba(0,0,0,1.00) 40%,
+      rgba(0,0,0,0.60) 62%,
+      rgba(0,0,0,0.25) 82%,
+      rgba(0,0,0,0.00) 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 50% 50% at 50% 50%,
+      rgba(0,0,0,1.00)  0%,
+      rgba(0,0,0,1.00) 40%,
+      rgba(0,0,0,0.60) 62%,
+      rgba(0,0,0,0.25) 82%,
+      rgba(0,0,0,0.00) 100%
+    );
+    transform: translateX(-50%);
     animation: ripple-pulse 14s ease-in-out infinite;
   }
   @keyframes ripple-pulse {
-    0%%, 100%% { background-size: 200vw 60vh, 100%% 100%%; }
-    50%%        { background-size: 207vw 60vh, 100%% 100%%; }
+    0%, 100% { width: 200vw; height: 60vh; }
+    50%      { width: 210vw; height: 62vh; }
   }
 
   body {
@@ -136,43 +153,32 @@
   }
 
   /* SVG ORNAMENT — murky 180° float, right side */
-  .murk-svg {
+  .murk-svg, .murk-svg-blur {
     position: absolute;
-    top: 48px;
-    right: -20%;
-    height: 120vh;
-    width: auto;
+    right: -15%;
     z-index: 1;
     pointer-events: none;
-    opacity: 0.32;
-    filter: hue-rotate(140deg) saturate(0.6) brightness(0.5) blur(1.5px);
-    -webkit-mask-image:
-      linear-gradient(to right, transparent 0%, rgba(0,0,0,0.08) 20%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 75%, black 100%),
-      linear-gradient(to bottom, black 0%, black 70%, transparent 100%);
-    -webkit-mask-composite: destination-in;
-    mask-image:
-      linear-gradient(to right, transparent 0%, rgba(0,0,0,0.08) 20%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 75%, black 100%),
-      linear-gradient(to bottom, black 0%, black 70%, transparent 100%);
-    mask-composite: intersect;
+    width: 90vw;
+    height: 120vh;
+    background-color: oklch(0.38 0.08 170);
+    -webkit-mask-image: url('usethis.svg');
+            mask-image: url('usethis.svg');
+    -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+            mask-size: contain;
+    -webkit-mask-position: right top;
+            mask-position: right top;
+  }
+  .murk-svg {
+    top: 25vh;
+    opacity: 0.18;
+    filter: blur(6px);
   }
   .murk-svg-blur {
-    position: absolute;
-    top: 48px;
-    right: -20%;
-    height: 120vh;
-    width: auto;
-    z-index: 1;
-    pointer-events: none;
-    opacity: 0.18;
-    filter: hue-rotate(140deg) saturate(0.4) brightness(0.35) blur(8px);
-    -webkit-mask-image:
-      linear-gradient(to right, transparent 10%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.6) 55%, black 80%),
-      linear-gradient(to bottom, black 0%, black 60%, transparent 95%);
-    -webkit-mask-composite: destination-in;
-    mask-image:
-      linear-gradient(to right, transparent 10%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.6) 55%, black 80%),
-      linear-gradient(to bottom, black 0%, black 60%, transparent 95%);
-    mask-composite: intersect;
+    top: 28vh;
+    opacity: 0.10;
+    filter: blur(22px);
   }
 
   /* STATUE — layer 4: on top of darkening */
@@ -390,9 +396,12 @@
 </head>
 <body>
 
-<!-- MURK SVG: 180° zone, progressive blur, right 1/3 -->
-<img class="murk-svg" src="usethis.svg" alt="" aria-hidden="true">
-<img class="murk-svg-blur" src="usethis.svg" alt="" aria-hidden="true">
+<!-- RIPPLE: surface rings at top -->
+<div class="surface-ripple" aria-hidden="true"></div>
+
+<!-- MURK SVG: green tinted, blurs downward, right 1/3 -->
+<div class="murk-svg" aria-hidden="true"></div>
+<div class="murk-svg-blur" aria-hidden="true"></div>
 
 <!-- STATUE: fixed at page bottom, murky -->
 <div class="statue-wrap" aria-hidden="true">
